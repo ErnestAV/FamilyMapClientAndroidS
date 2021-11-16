@@ -2,4 +2,6 @@
     <string name="app_name">FamilyMapClient</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="signInButton"> Sign In </string>
+    <string name="registerButton"> Register </string>
 </resources>

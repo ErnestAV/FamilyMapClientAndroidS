@@ -21,15 +21,8 @@ import result.RegisterResult;
 */
 public class ServerProxy {
 
-    // The getGameList method calls the server's "/games/list" operation to
-    // retrieve a list of games running in the server in JSON format
-
     LoginResult login(LoginRequest loginR, String serverHost, String serverPort) {
         LoginResult loginResult = new LoginResult(null);
-
-        //TODO: Need to have a flag set on Android App to use an un secure connection
-
-        // This method shows how to send a POST request to a server
 
         try {
             // Create a URL indicating where the server is running, and which
@@ -41,15 +34,12 @@ public class ServerProxy {
             HttpURLConnection http = (HttpURLConnection)url.openConnection();
 
 
-            // Specify that we are sending an HTTP GET request
+            // Specify that we are sending an HTTP POST request
             http.setRequestMethod("POST");
 
             // Indicate that this request will not contain an HTTP request body
             http.setDoOutput(true);
 
-
-            // Add an auth token to the request in the HTTP "Authorization" header --> NOT NEEDED IN LOGIN
-            //http.addRequestProperty("Authorization", "afj232hj2332");
 
             // Specify that we would like to receive the server's response in JSON
             // format by putting an HTTP "Accept" header on the request (this is not
@@ -102,15 +92,12 @@ public class ServerProxy {
             e.printStackTrace();
         }
 
+        //Return loginResult
         return loginResult;
     }
 
     RegisterResult register(RegisterRequest registerRequest, String serverHost, String serverPort) {
         RegisterResult registerResult = new RegisterResult(null);
-
-        //TODO: Need to have a flag set on Android App to use an un secure connection
-
-        // This method shows how to send a POST request to a server
 
         try {
             // Create a URL indicating where the server is running, and which
@@ -122,7 +109,7 @@ public class ServerProxy {
             HttpURLConnection http = (HttpURLConnection)url.openConnection();
 
 
-            // Specify that we are sending an HTTP GET request
+            // Specify that we are sending an HTTP POST request
             http.setRequestMethod("POST");
 
             // Indicate that this request will not contain an HTTP request body
@@ -188,10 +175,6 @@ public class ServerProxy {
 
     PersonResult person(PersonRequest personRequest, String serverHost, String serverPort, String authToken) {
         PersonResult personResult = new PersonResult("Person result is Null");
-
-        //TODO: Need to have a flag set on Android App to use an un secure connection
-
-        // This method shows how to send a GET request to a server
 
         try {
             // Create a URL indicating where the server is running, and which
@@ -265,10 +248,6 @@ public class ServerProxy {
 
     EventResult event(EventRequest eventRequest, String serverHost, String serverPort, String authToken) {
         EventResult eventResult = new EventResult("Event Result is Null");
-
-        //TODO: Need to have a flag set on Android App to use an un secure connection
-
-        // This method shows how to send a GET request to a server
 
         try {
             // Create a URL indicating where the server is running, and which
