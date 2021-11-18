@@ -1,9 +1,13 @@
 package com.example.familymapclient;
 
+import android.net.nsd.NsdManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,6 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -129,6 +137,44 @@ public class LoginFragment extends Fragment {
         firstName.addTextChangedListener(textWatcher);
         lastName.addTextChangedListener(textWatcher);
         emailInput.addTextChangedListener(textWatcher);
+
+        //Disable both buttons until proper fields are filled
+        signInButton.setEnabled(false);
+        registerButton.setEnabled(false);
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Handler registerHandler = new Handler() {
+                    String registerCode = "Register";
+                    @Override
+                    public void handleMessage(Message msg) {
+                        Bundle bundle = msg.getData();
+
+                        String message = bundle.getString(registerCode);
+
+                        if (message.contains("OK")) {
+                            if (listener == null) {
+                                listener.notifyDone();
+                            }
+                            else {
+                                listener.makeToast(message);
+                                listener.notifyDone();
+                            }
+                        }
+                        else {
+                            listener.makeToast(message);
+                        }
+                    }
+                };
+
+                RegisterTask registerTask = new RegisterTask(serverPort.getText().toString(), serverIP.getText().toString(), usernameInput.getText().toString(), passwordInput.getText().toString(), firstName.getText().toString(), lastName.getText().toString(), emailInput.getText().toString(), genderString, registerHandler);
+                ExecutorService executorService = Executors.newSingleThreadExecutor();
+                executorService.submit(registerTask);
+            }
+        });
+
+        //Do the Login set On Click Listener thing
 
 
         // Inflate the layout for this fragment

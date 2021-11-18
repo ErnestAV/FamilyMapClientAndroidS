@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import result.LoginResult;
 
@@ -46,6 +47,6 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
 
     @Override
     public void makeToast(String message) {
-
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

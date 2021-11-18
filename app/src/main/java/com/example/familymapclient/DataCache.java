@@ -6,14 +6,14 @@ import model.Person;
 
 public class DataCache {
 
-    Map<String, Person> familyTree;
+    Map<String, Person> personMap;
 
-    public Map<String, Person> getFamilyTree() {
-        return familyTree;
+    public Map<String, Person> getPersonMap() {
+        return personMap;
     }
 
-    public void setFamilyTree(Map<String, Person> familyTree) {
-        this.familyTree = familyTree;
+    public void setPersonMap(Map<String, Person> personMap) {
+        this.personMap = personMap;
     }
 
 }
