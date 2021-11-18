@@ -14,8 +14,8 @@ import result.PersonResult;
 import result.RegisterResult;
 
 public class RegisterTask implements Runnable {
-    private String serverPort;
     private String serverIP;
+    private String serverPort;
     private String usernameInput;
     private String passwordInput;
     private String firstName;
@@ -29,9 +29,9 @@ public class RegisterTask implements Runnable {
 
     Person personRegistered;
 
-    public RegisterTask(String serverPort, String serverIP, String usernameInput, String passwordInput, String firstName, String lastName, String emailInput, String gender, Handler handler) {
-        this.serverPort = serverPort;
+    public RegisterTask(String serverIP, String serverPort, String usernameInput, String passwordInput, String firstName, String lastName, String emailInput, String gender, Handler handler) {
         this.serverIP = serverIP;
+        this.serverPort = serverPort;
         this.usernameInput = usernameInput;
         this.passwordInput = passwordInput;
         this.firstName = firstName;
@@ -43,14 +43,7 @@ public class RegisterTask implements Runnable {
 
     @Override
     public void run() {
-        RegisterRequest registerRequest = null;
-
-        registerRequest.setUsername(usernameInput);
-        registerRequest.setPassword(passwordInput);
-        registerRequest.setFirstName(firstName);
-        registerRequest.setLastName(lastName);
-        registerRequest.setEmail(emailInput);
-        registerRequest.setGender(gender);
+        RegisterRequest registerRequest = new RegisterRequest(usernameInput, passwordInput, emailInput, firstName, lastName, gender);
 
         ServerProxy serverProxy = new ServerProxy();
 
@@ -71,7 +64,7 @@ public class RegisterTask implements Runnable {
 
             personRegistered = dataCache.getPersonMap().get(registerResult.getPersonID());
 
-            sendMessage("OK. Register was successful. " +
+            sendMessage("OK. Register was successful." +
                     "\nWelcome " + personRegistered.getFirstName() + " " + personRegistered.getLastName() + "!");
         }
         else {

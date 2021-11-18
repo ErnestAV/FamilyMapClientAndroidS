@@ -1,6 +1,6 @@
 package com.example.familymapclient;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
  * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment {
-    Listener listener;
+    private Listener listener;
 
     //Global variables
     private String genderString = "M";
@@ -161,13 +161,46 @@ public class LoginFragment extends Fragment {
                     }
                 };
 
-                RegisterTask registerTask = new RegisterTask(serverPort.getText().toString(), serverIP.getText().toString(), usernameInput.getText().toString(), passwordInput.getText().toString(), firstName.getText().toString(), lastName.getText().toString(), emailInput.getText().toString(), genderString, registerHandler);
+                RegisterTask registerTask = new RegisterTask(serverIP.getText().toString(), serverPort.getText().toString(), usernameInput.getText().toString(), passwordInput.getText().toString(), firstName.getText().toString(), lastName.getText().toString(), emailInput.getText().toString(), genderString, registerHandler);
                 ExecutorService executorService = Executors.newSingleThreadExecutor();
                 executorService.submit(registerTask);
             }
         });
 
         //Do the Login set On Click Listener thing
+        signInButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Handler signInHandler = new Handler() {
+                    String signInCode = "Sign In";
+                    @Override
+                    public void handleMessage(Message msg) {
+                        Bundle bundle = msg.getData();
+
+                        String message = bundle.getString(signInCode);
+
+                        if (message.contains("OK")) {
+                            if (listener == null) {
+                                listener.notifyDone();
+                            }
+                            else {
+                                listener.makeToast(message);
+                                listener.notifyDone();
+                            }
+                        }
+                        else {
+                            listener.makeToast(message);
+                        }
+                    }
+                };
+
+                //Do the LoginTask executor Service here
+                LoginTask loginTask = new LoginTask(serverIP.getText().toString(), serverPort.getText().toString(), usernameInput.getText().toString(), passwordInput.getText().toString(), signInHandler);
+                ExecutorService executorService = Executors.newSingleThreadExecutor();
+                executorService.submit(loginTask);
+            }
+        });
 
 
         // Inflate the layout for this fragment

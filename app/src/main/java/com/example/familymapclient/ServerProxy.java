@@ -100,7 +100,7 @@ public class ServerProxy {
     }
 
     RegisterResult register(RegisterRequest registerRequest, String serverHost, String serverPort) {
-        RegisterResult registerResult = new RegisterResult(null);
+        RegisterResult registerResult = new RegisterResult();
 
         try {
             // Create a URL indicating where the server is running, and which

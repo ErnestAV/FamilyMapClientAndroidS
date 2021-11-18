@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
         Fragment frag = fm.findFragmentById(R.id.main_activity);
 
         if (frag == null) {
-            frag = new LoginFragment();
+            frag = createLoginFragment();
             fm.beginTransaction()
                     .add(R.id.main_activity, frag)
                     .commit();
