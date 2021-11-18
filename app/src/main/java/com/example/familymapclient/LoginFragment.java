@@ -4,9 +4,15 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,9 +20,24 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment {
+    Listener listener;
+
+    //Global variables
+    private String genderString = "M";
 
     public LoginFragment() {
         // Required empty public constructor
+    }
+
+    //Interface
+    public interface Listener {
+
+        void notifyDone();
+        void makeToast(String message);
+    }
+
+    public void registerListener(Listener listenerObject) {
+        this.listener = listenerObject;
     }
 
     /**
@@ -43,6 +64,71 @@ public class LoginFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         View viewToReturn = inflater.inflate(R.layout.fragment_login, container, false);
+
+        EditText serverPort = viewToReturn.findViewById(R.id.hostPortInput);
+        EditText serverIP = viewToReturn.findViewById(R.id.hostIPInput);
+        EditText usernameInput = viewToReturn.findViewById(R.id.usernameInput);
+        EditText passwordInput = viewToReturn.findViewById(R.id.passwordInput);
+        EditText firstName = viewToReturn.findViewById(R.id.firstNameInput);
+        EditText lastName = viewToReturn.findViewById(R.id.lastNameInput);
+        EditText emailInput = viewToReturn.findViewById(R.id.emailInput);
+        RadioGroup gender = viewToReturn.findViewById(R.id.genderRadioGrouping);
+
+        gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (group.getCheckedRadioButtonId() == R.id.maleGenderButton) {
+                    genderString = "M";
+                }
+                else {
+                    genderString = "F";
+                }
+            }
+        });
+
+        Button signInButton = viewToReturn.findViewById(R.id.signInButton);
+        Button registerButton = viewToReturn.findViewById(R.id.registerButton);
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!(serverIP.getText().toString().equals("")) && !(serverPort.getText().toString().equals(""))
+                && !(usernameInput.getText().toString().equals("")) && !(passwordInput.getText().toString().equals(""))
+                        && !(firstName.getText().toString().equals("")) && !(lastName.getText().toString().equals(""))
+                        && !(emailInput.getText().toString().equals(""))) {
+                    registerButton.setEnabled(true);
+                }
+                else {
+                    registerButton.setEnabled(false);
+                }
+
+                if (!(serverIP.getText().toString().equals("")) && !(serverPort.getText().toString().equals(""))
+                        && !(usernameInput.getText().toString().equals("")) && !(passwordInput.getText().toString().equals(""))) {
+                    signInButton.setEnabled(true);
+                }
+                else {
+                    signInButton.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        serverPort.addTextChangedListener(textWatcher);
+        serverIP.addTextChangedListener(textWatcher);
+        usernameInput.addTextChangedListener(textWatcher);
+        passwordInput.addTextChangedListener(textWatcher);
+        firstName.addTextChangedListener(textWatcher);
+        lastName.addTextChangedListener(textWatcher);
+        emailInput.addTextChangedListener(textWatcher);
 
 
         // Inflate the layout for this fragment

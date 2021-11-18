@@ -6,7 +6,9 @@ import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import result.LoginResult;
+
+public class MainActivity extends AppCompatActivity implements LoginFragment.Listener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +24,28 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.main_activity, frag)
                     .commit();
         }
+        else {
+            if (frag instanceof LoginFragment) {
+                ((LoginFragment) frag).registerListener(this);
+            }
+        }
+    }
+
+    private Fragment createLoginFragment() {
+        LoginFragment loginFragment = new LoginFragment();
+
+        loginFragment.registerListener(this);
+
+        return loginFragment;
+    }
+
+    @Override
+    public void notifyDone() {
+
+    }
+
+    @Override
+    public void makeToast(String message) {
+
     }
 }
