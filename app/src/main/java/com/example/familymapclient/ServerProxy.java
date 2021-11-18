@@ -27,7 +27,7 @@ public class ServerProxy {
         try {
             // Create a URL indicating where the server is running, and which
             // web API operation we want to call
-            URL url = new URL("http://" + serverHost + ":" + serverPort + "/login");
+            URL url = new URL("http://" + serverHost + ":" + serverPort + "/user/login");
 
 
             // Start constructing our HTTP request
@@ -83,6 +83,9 @@ public class ServerProxy {
                 // Extract data from the HTTP response body
                 String respData = readString(respBody);
 
+                //Set the LoginResult to the data
+                loginResult = gson.fromJson(respData, LoginResult.class);
+
                 // Display the data returned from the server
                 System.out.println(respData);
             }
@@ -102,7 +105,7 @@ public class ServerProxy {
         try {
             // Create a URL indicating where the server is running, and which
             // web API operation we want to call
-            URL url = new URL("http://" + serverHost + ":" + serverPort + "/register");
+            URL url = new URL("http://" + serverHost + ":" + serverPort + "/user/register");
 
 
             // Start constructing our HTTP request
@@ -161,6 +164,9 @@ public class ServerProxy {
                 // Extract data from the HTTP response body
                 String respData = readString(respBody);
 
+                //Set the LoginResult to the data
+                registerResult = gson.fromJson(respData, RegisterResult.class);
+
                 // Display the data returned from the server
                 System.out.println(respData);
             }
@@ -175,6 +181,7 @@ public class ServerProxy {
 
     PersonResult person(PersonRequest personRequest, String serverHost, String serverPort, String authToken) {
         PersonResult personResult = new PersonResult("Person result is Null");
+        Gson gson = new Gson();
 
         try {
             // Create a URL indicating where the server is running, and which
@@ -216,8 +223,7 @@ public class ServerProxy {
                 // Extract JSON data from the HTTP response body
                 String respData = readString(respBody);
 
-                //Set the LoginResult to the data
-                Gson gson = new Gson();
+                //Set the PersonResult to the data
                 personResult = gson.fromJson(respData, PersonResult.class);
 
                 // Display the JSON data returned from the server
@@ -234,6 +240,9 @@ public class ServerProxy {
                 // Extract data from the HTTP response body
                 String respData = readString(respBody);
 
+                //Set the PersonResult to the data
+                personResult = gson.fromJson(respData, PersonResult.class);
+
                 // Display the data returned from the server
                 System.out.println(respData);
             }
@@ -248,6 +257,7 @@ public class ServerProxy {
 
     EventResult event(EventRequest eventRequest, String serverHost, String serverPort, String authToken) {
         EventResult eventResult = new EventResult("Event Result is Null");
+        Gson gson = new Gson();
 
         try {
             // Create a URL indicating where the server is running, and which
@@ -289,8 +299,7 @@ public class ServerProxy {
                 // Extract JSON data from the HTTP response body
                 String respData = readString(respBody);
 
-                //Set the LoginResult to the data
-                Gson gson = new Gson();
+                //Set the EventResult to the data
                 eventResult = gson.fromJson(respData, EventResult.class);
 
                 // Display the JSON data returned from the server
@@ -306,6 +315,9 @@ public class ServerProxy {
 
                 // Extract data from the HTTP response body
                 String respData = readString(respBody);
+
+                //Set the EventResult to the data
+                eventResult = gson.fromJson(respData, EventResult.class);
 
                 // Display the data returned from the server
                 System.out.println(respData);
