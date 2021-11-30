@@ -30,6 +30,8 @@ android {
 
 dependencies {
 
+    implementation 'com.joanzapata.iconify:android-iconify:2.2.2'
+    implementation 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
     implementation 'com.google.code.gson:gson:2.8.7' //Add GSON
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'

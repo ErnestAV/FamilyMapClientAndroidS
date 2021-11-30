@@ -17,4 +17,7 @@
     <item name="usernameInput" type="id" />
     <item name="hostIPInput" type="id" />
     <item name="hostIPText" type="id" />
+
+    <item name="settingsMenuItem" type="id" />
+    <item name="searchMenuItem" type="id" />
 </resources>

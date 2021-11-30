@@ -7,6 +7,9 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
+
 import result.LoginResult;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.Listener {
@@ -15,6 +18,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Iconify.with(new FontAwesomeModule());
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment frag = fm.findFragmentById(R.id.main_activity);
@@ -42,7 +47,12 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Lis
 
     @Override
     public void notifyDone() {
+        FragmentManager fm = this.getSupportFragmentManager();
+        Fragment frag = new MapsFragment();
 
+        fm.beginTransaction()
+                .replace(R.id.main_activity, frag)
+                .commit();
     }
 
     @Override
