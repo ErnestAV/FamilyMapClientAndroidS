@@ -1,13 +1,28 @@
 package com.example.familymapclient;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
+import model.Event;
 import model.Person;
 
 public class DataCache {
 
-    Map<String, Person> personMap;
+    public static DataCache getInstance() {
+        return instance;
+    }
 
+    private static DataCache instance = new DataCache();
+
+    /* DECLARATIONS OF DATA STRUCTURES */
+    Map<String, Person> personMap = new HashMap<>();
+    Map<String, Event> eventMap = new HashMap<>();
+    Map<String, ArrayList<Event>> personEvents = new HashMap<>();
+
+
+    /* PERSON */
     public Map<String, Person> getPersonMap() {
         return personMap;
     }
@@ -16,4 +31,17 @@ public class DataCache {
         this.personMap = personMap;
     }
 
+    /* EVENT */
+    public Map<String, Event> getEventMap() {
+        return eventMap;
+    }
+
+    public void setEventMap(Map<String, Event> eventMap) {
+        this.eventMap = eventMap;
+    }
+
+    /* PERSON EVENTS Data Structures */
+    public Map<String, ArrayList<Event>> getPersonEvents() {
+        return personEvents;
+    }
 }

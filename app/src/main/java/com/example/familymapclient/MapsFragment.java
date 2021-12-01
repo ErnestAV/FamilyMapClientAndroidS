@@ -1,10 +1,16 @@
 package com.example.familymapclient;
 
+import static android.graphics.BlendMode.HUE;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,18 +19,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
+import java.util.ArrayList;
+
+import model.Event;
+
 public class MapsFragment extends Fragment {
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
+
+        DataCache dataCache = DataCache.getInstance();
 
         /**
          * Manipulates the map once available.
@@ -35,11 +49,30 @@ public class MapsFragment extends Fragment {
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
          */
+
         @Override
         public void onMapReady(GoogleMap googleMap) {
             LatLng sydney = new LatLng(-34, 151);
             googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            for (Event event : dataCache.getEventMap().values()) {
+                LatLng eventLocation = new LatLng(event.getLatitude(), event.getLongitude());
+                switch (event.getEventType()) {
+                    case "Birth":
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(eventLocation)
+                                .title(event.getCity() + ", " + event.getCountry())
+                                .icon(BitmapDescriptorFactory.defaultMarker(1)));
+                    case "Death":
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(eventLocation)
+                                .title(event.getCity() + ", " + event.getCountry())
+                                .icon(BitmapDescriptorFactory.defaultMarker(26)));
+                }
+                googleMap.addMarker(new MarkerOptions().position(eventLocation).title(event.getCity() + ", " + event.getCountry()));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(eventLocation));
+            }
         }
     };
 
@@ -85,12 +118,18 @@ public class MapsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        Intent intent;
+
         switch (item.getItemId()) {
             case R.id.searchMenuItem:
                 Toast.makeText(getActivity(), getString(R.string.searchMenuSelectedMessage), Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.settingsMenuItem:
                 Toast.makeText(getActivity(), getString(R.string.settingsMenuSelectedMessage), Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

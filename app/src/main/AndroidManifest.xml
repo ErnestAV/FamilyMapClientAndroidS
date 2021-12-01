@@ -21,9 +21,11 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".SearchActivity"
+            android:parentActivityName=".MainActivity"
             android:exported="false" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

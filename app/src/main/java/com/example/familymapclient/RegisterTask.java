@@ -4,12 +4,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import model.Event;
 import model.Person;
+import request.EventRequest;
 import request.PersonRequest;
 import request.RegisterRequest;
+import result.EventResult;
 import result.PersonResult;
 import result.RegisterResult;
 
@@ -49,18 +53,48 @@ public class RegisterTask implements Runnable {
 
         RegisterResult registerResult = serverProxy.register(registerRequest, serverIP, serverPort);
 
-        DataCache dataCache = new DataCache();
+        DataCache dataCache = DataCache.getInstance();
 
         if (registerResult.getSuccess()) {
             PersonRequest personRequest = new PersonRequest();
             PersonResult personResult = serverProxy.person(personRequest, serverIP, serverPort, registerResult.getAuthtoken());
 
-            Map<String, Person> registerMap = new HashMap<>();
+            // PERSON
+            Map<String, Person> personMap = new HashMap<>();
 
             for (int i = 0; i < personResult.getData().length; i++) {
-                registerMap.put(personResult.getData()[i].getPersonID(), personResult.getData()[i]);
+                personMap.put(personResult.getData()[i].getPersonID(), personResult.getData()[i]);
             }
-            dataCache.setPersonMap(registerMap);
+            dataCache.setPersonMap(personMap);
+
+            // EVENT
+            EventRequest eventRequest = new EventRequest();
+            EventResult eventResult = serverProxy.event(eventRequest, serverIP, serverPort, registerResult.getAuthtoken());
+
+            Map<String, Event> eventMap = new HashMap<>();
+
+            for (int i = 0; i < eventResult.getData().length; i++) {
+                eventMap.put(eventResult.getData()[i].getEventID(), eventResult.getData()[i]);
+            }
+            dataCache.setEventMap(eventMap);
+
+            // PERSON EVENTS
+            for (int i = 0; i < personResult.getData().length; i++) {
+                String personID = personResult.getData()[i].getPersonID();
+
+                for (int j = 0; i < eventResult.getData().length; j++) {
+                    if (eventResult.getData()[j].getPersonID().equals(personID)) {
+                        if (dataCache.getPersonEvents().containsKey(personID)) {
+                            dataCache.getPersonEvents().get(personID).add(eventResult.getData()[j]);
+                        }
+                        else {
+                            ArrayList<Event> tempEventsArray = new ArrayList<>();
+                            tempEventsArray.add(eventResult.getData()[j]);
+                            dataCache.getPersonEvents().put(personID, tempEventsArray);
+                        }
+                    }
+                }
+            }
 
             personRegistered = dataCache.getPersonMap().get(registerResult.getPersonID());
 
