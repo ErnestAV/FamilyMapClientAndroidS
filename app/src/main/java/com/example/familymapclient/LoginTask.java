@@ -71,11 +71,11 @@ public class LoginTask implements Runnable {
             }
             dataCache.setEventMap(eventMap);
 
-            /*// PERSON EVENTS
+            // PERSON EVENTS
             for (int i = 0; i < personResult.getData().length; i++) {
                 String personID = personResult.getData()[i].getPersonID();
 
-                for (int j = 0; i < eventResult.getData().length; j++) {
+                for (int j = 0; j < eventResult.getData().length; j++) {
                     if (eventResult.getData()[j].getPersonID().equals(personID)) {
                         if (dataCache.getPersonEvents().containsKey(personID)) {
                             dataCache.getPersonEvents().get(personID).add(eventResult.getData()[j]);
@@ -87,7 +87,7 @@ public class LoginTask implements Runnable {
                         }
                     }
                 }
-            }*/
+            }
 
             personLoggedIn = dataCache.getPersonMap().get(loginResult.getPersonID());
 

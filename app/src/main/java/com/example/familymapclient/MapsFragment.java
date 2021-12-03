@@ -1,40 +1,39 @@
 package com.example.familymapclient;
 
-import static android.graphics.BlendMode.HUE;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
-import java.util.ArrayList;
-
 import model.Event;
+import model.Person;
 
 public class MapsFragment extends Fragment {
+
+    TextView detailsText;
+    ImageView genderImage;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -56,21 +55,54 @@ public class MapsFragment extends Fragment {
             googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
+
             for (Event event : dataCache.getEventMap().values()) {
                 LatLng eventLocation = new LatLng(event.getLatitude(), event.getLongitude());
-                googleMap.addMarker(new MarkerOptions().position(eventLocation).title(event.getCity() + ", " + event.getCountry()));
+                Marker marker = googleMap.addMarker(new MarkerOptions().position(eventLocation).title(event.getCity() + ", " + event.getCountry()));
+                if (marker != null) {
+                    marker.setTag(event);
+                } else {
+                    System.out.println("Marker is null");
+                }
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(eventLocation));
             }
+
+            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    Event eventSelected = (Event) marker.getTag();
+                    DataCache dataCache = DataCache.getInstance();
+
+                    Person personSelected = dataCache.getPersonMap().get(eventSelected.getPersonID());
+                    if (personSelected != null) {
+                        detailsText.setText(personSelected.getFirstName() + " " + personSelected.getLastName()
+                        + "\n" + eventSelected.getEventType() + " " + eventSelected.getCity() + ", " + eventSelected.getCountry());
+                    }
+
+                    if (personSelected.getGender().equalsIgnoreCase("f")) {
+                        genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_female, null));
+                    } else {
+                        genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_male, null));
+                    }
+
+                    return false;
+                }
+            });
         }
     };
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
+        detailsText = view.findViewById(R.id.detailsTextView);
+        genderImage = view.findViewById(R.id.genderImageView);
+        detailsText.setText("Click on a marker to learn more!");
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        return view;
     }
 
     @Override
