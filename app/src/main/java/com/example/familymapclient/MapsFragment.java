@@ -58,18 +58,6 @@ public class MapsFragment extends Fragment {
 
             for (Event event : dataCache.getEventMap().values()) {
                 LatLng eventLocation = new LatLng(event.getLatitude(), event.getLongitude());
-                switch (event.getEventType()) {
-                    case "Birth":
-                        googleMap.addMarker(new MarkerOptions()
-                                .position(eventLocation)
-                                .title(event.getCity() + ", " + event.getCountry())
-                                .icon(BitmapDescriptorFactory.defaultMarker(1)));
-                    case "Death":
-                        googleMap.addMarker(new MarkerOptions()
-                                .position(eventLocation)
-                                .title(event.getCity() + ", " + event.getCountry())
-                                .icon(BitmapDescriptorFactory.defaultMarker(26)));
-                }
                 googleMap.addMarker(new MarkerOptions().position(eventLocation).title(event.getCity() + ", " + event.getCountry()));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(eventLocation));
             }

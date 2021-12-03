@@ -7,19 +7,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class SearchActivity extends AppCompatActivity {
+public class PersonActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_person);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent intent;
 
-        if (item.getItemId() == android.R.id.home)  {
+        if (item.getItemId() == android.R.id.home) {
             intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);

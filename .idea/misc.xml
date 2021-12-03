@@ -5,9 +5,11 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.1828125" />
         <entry key="app/src/debug/res/menu/main_menu.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_event.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15070921985815602" />
+        <entry key="app/src/main/res/layout/activity_person.xml" value="0.16770833333333332" />
         <entry key="app/src/main/res/layout/activity_search.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_settings.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.2558876811594203" />
       </map>
