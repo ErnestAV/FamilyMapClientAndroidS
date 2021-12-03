@@ -3,7 +3,6 @@ package com.example.familymapclient;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import model.Event;
 import model.Person;
@@ -20,7 +19,7 @@ public class DataCache {
     Map<String, Person> personMap = new HashMap<>();
     Map<String, Event> eventMap = new HashMap<>();
     Map<String, ArrayList<Event>> personEvents = new HashMap<>();
-
+    Map<String, Float> typeEventMap = new HashMap<>();
 
     /* PERSON */
     public Map<String, Person> getPersonMap() {
@@ -44,4 +43,7 @@ public class DataCache {
     public Map<String, ArrayList<Event>> getPersonEvents() {
         return personEvents;
     }
+
+    /* RANDOM EVENTS */
+    public Map<String, Float> getTypeEventMap() { return typeEventMap; }
 }

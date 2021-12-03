@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,11 +22,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+
+import java.util.Locale;
+import java.util.Random;
 
 import model.Event;
 import model.Person;
@@ -51,10 +57,18 @@ public class MapsFragment extends Fragment {
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
+            Float color = 0f;
             for (Event event : dataCache.getEventMap().values()) {
                 LatLng eventLocation = new LatLng(event.getLatitude(), event.getLongitude());
                 Marker marker = googleMap.addMarker(new MarkerOptions().position(eventLocation).title(event.getCity() + ", " + event.getCountry()));
-                if (marker != null) {
+                if (marker != null) { // If event is already in the EventType map
+                    if (dataCache.getTypeEventMap().containsKey(event.getEventType().toLowerCase())) {
+                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(dataCache.getTypeEventMap().get(event.getEventType().toLowerCase())));
+                    } else { // If event does not exist
+                        color = color + 30f;
+                        dataCache.getTypeEventMap().put(event.getEventType().toLowerCase(), color);
+                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(dataCache.getTypeEventMap().get(event.getEventType().toLowerCase())));
+                    }
                     marker.setTag(event);
                 } else {
                     System.out.println("Marker is null");
