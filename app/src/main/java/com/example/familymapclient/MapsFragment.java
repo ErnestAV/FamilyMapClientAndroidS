@@ -51,11 +51,6 @@ public class MapsFragment extends Fragment {
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-
             for (Event event : dataCache.getEventMap().values()) {
                 LatLng eventLocation = new LatLng(event.getLatitude(), event.getLongitude());
                 Marker marker = googleMap.addMarker(new MarkerOptions().position(eventLocation).title(event.getCity() + ", " + event.getCountry()));
@@ -65,6 +60,7 @@ public class MapsFragment extends Fragment {
                     System.out.println("Marker is null");
                 }
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(eventLocation));
+                genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_default, null));
             }
 
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -76,7 +72,8 @@ public class MapsFragment extends Fragment {
                     Person personSelected = dataCache.getPersonMap().get(eventSelected.getPersonID());
                     if (personSelected != null) {
                         detailsText.setText(personSelected.getFirstName() + " " + personSelected.getLastName()
-                        + "\n" + eventSelected.getEventType() + " " + eventSelected.getCity() + ", " + eventSelected.getCountry());
+                        + "\n" + eventSelected.getEventType() + ": " + eventSelected.getCity() + ", " + eventSelected.getCountry()
+                        + "\n" + "Year: " + eventSelected.getYear());
                     }
 
                     if (personSelected.getGender().equalsIgnoreCase("f")) {

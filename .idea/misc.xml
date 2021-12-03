@@ -5,15 +5,17 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.1828125" />
         <entry key="app/src/debug/res/menu/main_menu.xml" value="0.335" />
+        <entry key="app/src/main/res/drawable/ic_baseline_person_default.xml" value="0.26481481481481484" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_female.xml" value="0.18385416666666668" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_male.xml" value="0.18385416666666668" />
+        <entry key="app/src/main/res/drawable/ic_baseline_person_sample.xml" value="0.26481481481481484" />
         <entry key="app/src/main/res/layout/activity_event.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15070921985815602" />
         <entry key="app/src/main/res/layout/activity_person.xml" value="0.16770833333333332" />
         <entry key="app/src/main/res/layout/activity_search.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.2558876811594203" />
+        <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.1" />
       </map>
     </option>
   </component>
