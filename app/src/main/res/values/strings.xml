@@ -9,4 +9,7 @@
 
     <string name="searchMenuItem"> Search Bar </string>
     <string name="searchMenuSelectedMessage"> You selected the search bar menu item </string>
+
+    <string name="lifeEventsTitle"> Life Events </string>
+    <string name="familyRelationsTitle"> Family Relations </string>
 </resources>

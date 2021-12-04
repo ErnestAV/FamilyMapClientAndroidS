@@ -77,13 +77,13 @@ public class LoginTask implements Runnable {
 
                 for (int j = 0; j < eventResult.getData().length; j++) {
                     if (eventResult.getData()[j].getPersonID().equals(personID)) {
-                        if (dataCache.getPersonEvents().containsKey(personID)) {
-                            dataCache.getPersonEvents().get(personID).add(eventResult.getData()[j]);
+                        if (dataCache.getAllPersonEvents().containsKey(personID)) {
+                            dataCache.getAllPersonEvents().get(personID).add(eventResult.getData()[j]);
                         }
                         else {
                             ArrayList<Event> tempEventsArray = new ArrayList<>();
                             tempEventsArray.add(eventResult.getData()[j]);
-                            dataCache.getPersonEvents().put(personID, tempEventsArray);
+                            dataCache.getAllPersonEvents().put(personID, tempEventsArray);
                         }
                     }
                 }

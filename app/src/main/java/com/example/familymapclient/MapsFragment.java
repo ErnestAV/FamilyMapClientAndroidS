@@ -40,6 +40,7 @@ public class MapsFragment extends Fragment {
 
     TextView detailsText;
     ImageView genderImage;
+    String personID;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -74,14 +75,18 @@ public class MapsFragment extends Fragment {
                     System.out.println("Marker is null");
                 }
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(eventLocation));
-                genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_default, null));
+                setHasOptionsMenu(true);
             }
+
+            genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_default, null));
 
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                     Event eventSelected = (Event) marker.getTag();
                     DataCache dataCache = DataCache.getInstance();
+
+                    personID = eventSelected.getPersonID();
 
                     Person personSelected = dataCache.getPersonMap().get(eventSelected.getPersonID());
                     if (personSelected != null) {
@@ -112,7 +117,21 @@ public class MapsFragment extends Fragment {
         detailsText = view.findViewById(R.id.detailsTextView);
         genderImage = view.findViewById(R.id.genderImageView);
         detailsText.setText("Click on a marker to learn more!");
-        setHasOptionsMenu(true);
+
+        detailsText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (personID != null) {
+                    Intent intent = new Intent(getActivity(), PersonActivity.class);
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("PersonID", personID);
+                    intent.putExtras(bundle);
+
+                    startActivity(intent);
+                }
+            }
+        });
         return view;
     }
 
