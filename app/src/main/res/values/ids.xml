@@ -20,4 +20,5 @@
 
     <item name="settingsMenuItem" type="id" />
     <item name="searchMenuItem" type="id" />
+
 </resources>

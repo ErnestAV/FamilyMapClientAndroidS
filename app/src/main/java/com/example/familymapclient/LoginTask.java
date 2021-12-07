@@ -51,24 +51,30 @@ public class LoginTask implements Runnable {
         if (loginResult.getSuccess()) {
             PersonRequest personRequest = new PersonRequest();
             PersonResult personResult = serverProxy.person(personRequest, serverIP, serverPort, loginResult.getAuthtoken());
+            ArrayList<Person> personsToSearch = new ArrayList<>();
 
             // PERSON
             Map<String, Person> personMap = new HashMap<>();
 
             for (int i = 0; i < personResult.getData().length; i++) {
                 personMap.put(personResult.getData()[i].getPersonID(), personResult.getData()[i]);
+                personsToSearch.add(personResult.getData()[i]);
             }
+            dataCache.setPersonsToSearch(personsToSearch);
             dataCache.setPersonMap(personMap);
 
             // EVENT
             EventRequest eventRequest = new EventRequest();
             EventResult eventResult = serverProxy.event(eventRequest, serverIP, serverPort, loginResult.getAuthtoken());
+            ArrayList<Event> eventsToSearch = new ArrayList<>();
 
             Map<String, Event> eventMap = new HashMap<>();
 
             for (int i = 0; i < eventResult.getData().length; i++) {
                 eventMap.put(eventResult.getData()[i].getEventID(), eventResult.getData()[i]);
+                eventsToSearch.add(eventResult.getData()[i]);
             }
+            dataCache.setEventsToSearch(eventsToSearch);
             dataCache.setEventMap(eventMap);
 
             // PERSON EVENTS

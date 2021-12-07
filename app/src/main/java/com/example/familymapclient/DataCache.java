@@ -98,4 +98,49 @@ public class DataCache {
 
         return tempArray;
     }
+
+    /* EVENT ACTIVITY */
+
+    private boolean fromMap = false;
+
+    public boolean isFromMap() {
+        return fromMap;
+    }
+
+    public void setFromMap(boolean fromMap) {
+        this.fromMap = fromMap;
+    }
+
+
+    private String eventID;
+
+    public String getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
+    }
+
+    /* SEARCH ACTIVITY */
+
+    public ArrayList<Person> getPersonsToSearch() {
+        return personsToSearch;
+    }
+
+    public void setPersonsToSearch(ArrayList<Person> personsToSearch) {
+        this.personsToSearch = personsToSearch;
+    }
+
+    public ArrayList<Event> getEventsToSearch() {
+        return eventsToSearch;
+    }
+
+    public void setEventsToSearch(ArrayList<Event> eventsToSearch) {
+        this.eventsToSearch = eventsToSearch;
+    }
+
+    ArrayList<Person> personsToSearch = new ArrayList<>();
+
+    ArrayList<Event> eventsToSearch = new ArrayList<>();
 }

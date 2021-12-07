@@ -74,11 +74,35 @@ public class MapsFragment extends Fragment {
                 } else {
                     System.out.println("Marker is null");
                 }
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(eventLocation));
-                setHasOptionsMenu(true);
-            }
 
-            genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_default, null));
+                genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_default, null));
+
+                if (dataCache.isFromMap()) {
+                    Event eventFromEventActivity = dataCache.getEventMap().get(dataCache.getEventID());
+                    setHasOptionsMenu(false);
+                    LatLng eventFromEventActivityLocation = new LatLng(eventFromEventActivity.getLatitude(), eventFromEventActivity.getLongitude());
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(eventFromEventActivityLocation));
+
+                    personID = eventFromEventActivity.getPersonID();
+                    Person personSelected = dataCache.getPersonMap().get(eventFromEventActivity.getPersonID());
+
+                    if (personSelected != null) {
+                        detailsText.setText(personSelected.getFirstName() + " " + personSelected.getLastName()
+                                + "\n" + eventFromEventActivity.getEventType() + ": " + eventFromEventActivity.getCity() + ", " + eventFromEventActivity.getCountry()
+                                + "\n" + "Year: " + eventFromEventActivity.getYear());
+                    }
+
+                    if (personSelected.getGender().equalsIgnoreCase("f")) {
+                        genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_female, null));
+                    } else {
+                        genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_male, null));
+                    }
+                }
+                else  {
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(eventLocation));
+                    setHasOptionsMenu(true);
+                }
+            }
 
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override

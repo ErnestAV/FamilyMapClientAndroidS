@@ -75,11 +75,9 @@ public class PersonActivity extends AppCompatActivity {
     }
 
     private class ExpandableListAdapter extends BaseExpandableListAdapter {
-
         private static final int LIFE_EVENTS_GROUP_POSITION = 0;
         private static final int FAMILY_RELATIONS_GROUP_POSITION = 1;
 
-        //TODO: Change the person from event
         private final ArrayList<Event> lifeEvents;
         private final ArrayList<FamilyRelations> familyRelations;
 
@@ -187,12 +185,14 @@ public class PersonActivity extends AppCompatActivity {
         public void initializeLifeEventsView(View lifeEventsItemView, final int childPosition) {
             ImageView lifeEventImageView = lifeEventsItemView.findViewById(R.id.lifeEventImageView);
             lifeEventImageView.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_marker_event, null));
+
             TextView lifeEventNameView = lifeEventsItemView.findViewById(R.id.lifeEventTextView);
             lifeEventNameView.setText(lifeEvents.get(childPosition).getEventType()
                     + "; " + lifeEvents.get(childPosition).getCity()
                     + ", " + lifeEvents.get(childPosition).getCountry()
                     + "(" + lifeEvents.get(childPosition).getYear() + ")"
                     + "\n" + personSelected.getFirstName() + " " + personSelected.getLastName());
+
             lifeEventsItemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
