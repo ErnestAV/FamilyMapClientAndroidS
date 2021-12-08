@@ -89,49 +89,49 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    dataCache.setShowFatherSide(true);
+                    dataCache.setFatherSideToggled(true);
                 } else {
-                    dataCache.setShowFatherSide(false);
+                    dataCache.setFatherSideToggled(false);
                 }
             }
         });
-        fatherSwitch.setChecked(dataCache.isShowFatherSide());
+        fatherSwitch.setChecked(dataCache.isFatherSideToggled());
 
         motherSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    dataCache.setShowMotherSide(true);
+                    dataCache.setMotherSideToggled(true);
                 } else {
-                    dataCache.setShowMotherSide(false);
+                    dataCache.setMotherSideToggled(false);
                 }
             }
         });
-        motherSwitch.setChecked(dataCache.isShowMotherSide());
+        motherSwitch.setChecked(dataCache.isMotherSideToggled());
 
         maleEventsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    dataCache.setShowMaleEvents(true);
+                    dataCache.setMaleEventsToggled(true);
                 } else {
-                    dataCache.setShowMaleEvents(false);
+                    dataCache.setMaleEventsToggled(false);
                 }
             }
         });
-        maleEventsSwitch.setChecked(dataCache.isShowMaleEvents());
+        maleEventsSwitch.setChecked(dataCache.isMaleEventsToggled());
 
         femaleEventsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    dataCache.setShowFemaleEvents(true);
+                    dataCache.setFemaleEventsToggled(true);
                 } else {
-                    dataCache.setShowFemaleEvents(false);
+                    dataCache.setFemaleEventsToggled(false);
                 }
             }
         });
-        femaleEventsSwitch.setChecked(dataCache.isShowFemaleEvents());
+        femaleEventsSwitch.setChecked(dataCache.isFemaleEventsToggled());
     }
 
     @Override

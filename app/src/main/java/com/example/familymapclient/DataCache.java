@@ -33,7 +33,8 @@ public class DataCache {
     private Map<String, Event> eventMap = new HashMap<>();
     private Map<String, ArrayList<Event>> personEvents = new HashMap<>();
     private Map<String, Float> typeEventMap = new HashMap<>();
-    private ArrayList<Event> allFilteredParentEvents = new ArrayList<>();
+    private ArrayList<Event> fatherEvents = new ArrayList<>();
+    private ArrayList<Event> motherEvents = new ArrayList<>();
 
     /* PERSON */
     public Map<String, Person> getPersonMap() {
@@ -162,10 +163,10 @@ public class DataCache {
     boolean showLifeStoryLines = true;
     boolean showFamilyTreeLines = true;
     boolean showSpouseLines = true;
-    boolean showFatherSide = true;
-    boolean showMotherSide = true;
-    boolean showMaleEvents = true;
-    boolean showFemaleEvents = true;
+    boolean fatherSideToggled = true;
+    boolean motherSideToggled = true;
+    boolean maleEventsToggled = true;
+    boolean femaleEventsToggled = true;
 
     public boolean isShowLifeStoryLines() {
         return showLifeStoryLines;
@@ -191,138 +192,137 @@ public class DataCache {
         this.showSpouseLines = showSpouseLines;
     }
 
-    public boolean isShowFatherSide() {
-        return showFatherSide;
+    public boolean isFatherSideToggled() {
+        return fatherSideToggled;
     }
 
-    public void setShowFatherSide(boolean showFatherSide) {
-        this.showFatherSide = showFatherSide;
+    public void setFatherSideToggled(boolean fatherSideToggled) {
+        this.fatherSideToggled = fatherSideToggled;
     }
 
-    public boolean isShowMotherSide() {
-        return showMotherSide;
+    public boolean isMotherSideToggled() {
+        return motherSideToggled;
     }
 
-    public void setShowMotherSide(boolean showMotherSide) {
-        this.showMotherSide = showMotherSide;
+    public void setMotherSideToggled(boolean motherSideToggled) {
+        this.motherSideToggled = motherSideToggled;
     }
 
-    public boolean isShowMaleEvents() {
-        return showMaleEvents;
+    public boolean isMaleEventsToggled() {
+        return maleEventsToggled;
     }
 
-    public void setShowMaleEvents(boolean showMaleEvents) {
-        this.showMaleEvents = showMaleEvents;
+    public void setMaleEventsToggled(boolean maleEventsToggled) {
+        this.maleEventsToggled = maleEventsToggled;
     }
 
-    public boolean isShowFemaleEvents() {
-        return showFemaleEvents;
+    public boolean isFemaleEventsToggled() {
+        return femaleEventsToggled;
     }
 
-    public void setShowFemaleEvents(boolean showFemaleEvents) {
-        this.showFemaleEvents = showFemaleEvents;
+    public void setFemaleEventsToggled(boolean femaleEventsToggled) {
+        this.femaleEventsToggled = femaleEventsToggled;
     }
 
     public ArrayList<Event> categorizeEvents(Map<String, ArrayList<Event>> personEvents) {
 
         //Data Structures
-        ArrayList<Event> motherSideEvents = new ArrayList<>();
-        ArrayList<Event> fatherSideEvents = new ArrayList<>();
+        ArrayList<Event> motherSideEvents;
+        ArrayList<Event> fatherSideEvents;
+        ArrayList<Event> personRootEvents;
+        ArrayList<Event> personRootSpouseEvents = new ArrayList<>();
         ArrayList<Event> resultingEvents = new ArrayList<>();
 
-        if (showFatherSide) { /* CASE FATHERS */
-            String father = personMap.get(loggedInUser).getFatherID();
-            fatherSideEvents = filterParents(father);
+        /* GET FATHER AND MOTHER SIDES TO USE IN EVERY CASE */
+        String mother = personMap.get(loggedInUser).getMotherID();
+        motherEvents.addAll(personEvents.get(mother));
+        filterParents(motherEvents, mother);
+        motherSideEvents = motherEvents;
 
-            for (int i = 0; i < fatherSideEvents.size(); i++) {
-                Person currentPerson = personMap.get(fatherSideEvents.get(i).getPersonID());
+        String father = personMap.get(loggedInUser).getFatherID();
+        fatherEvents.addAll(personEvents.get(father));
+        filterParents(fatherEvents, father);
+        fatherSideEvents = fatherEvents;
 
-                if (currentPerson.getGender().equalsIgnoreCase("m") && showMaleEvents) {
-                    resultingEvents.add(fatherSideEvents.get(i));
-                }
-                else if (currentPerson.getGender().equalsIgnoreCase("f") && showFemaleEvents) {
-                    resultingEvents.add(fatherSideEvents.get(i));
+        Person rootPerson = personMap.get(loggedInUser);
+        personRootEvents = personEvents.get(rootPerson.getPersonID());
+
+        String rootSpouseID = personMap.get(loggedInUser).getSpouseID();
+        Person rootSpouse = personMap.get(rootSpouseID);
+
+        if (rootSpouse != null) {
+            personRootSpouseEvents = personEvents.get(rootSpouse.getPersonID());
+        }
+
+        resultingEvents.addAll(motherSideEvents);
+        resultingEvents.addAll(fatherSideEvents);
+        resultingEvents.addAll(personRootEvents);
+        resultingEvents.addAll(personRootSpouseEvents);
+
+        if (!fatherSideToggled) {
+            for (int i = 0; i < resultingEvents.size(); i++) {
+                Event event = resultingEvents.get(i);
+                if (fatherSideEvents.contains(event)) {
+                    resultingEvents.remove(i);
+                    i--;
                 }
             }
         }
-        else if (showMotherSide) { /* CASE MOTHERS */
-            String mother = personMap.get(loggedInUser).getMotherID();
-            motherSideEvents = filterParents(mother);
-
-            for (int i = 0; i < motherSideEvents.size(); i++) {
-                Person currentPerson = personMap.get(motherSideEvents.get(i).getPersonID());
-
-                if (currentPerson.getGender().equalsIgnoreCase("m") && showMaleEvents) {
-                    resultingEvents.add(motherSideEvents.get(i));
-                }
-                else if (currentPerson.getGender().equalsIgnoreCase("f") && showFemaleEvents) {
-                    resultingEvents.add(motherSideEvents.get(i));
+        if (!motherSideToggled) {
+            for (int i = 0; i < resultingEvents.size(); i++) {
+                Event event = resultingEvents.get(i);
+                if (motherSideEvents.contains(event)) {
+                    resultingEvents.remove(i);
+                    i--;
                 }
             }
         }
-        else if (showMaleEvents && showFemaleEvents) { /* CASE MALE AND FEMALES */
-            for (Person person : personMap.values()) {
-                if (person.getGender().equalsIgnoreCase("m")) {
-                    for (int i = 0; i < personEvents.get(person.getPersonID()).size(); i++) {
-                        if (getAllPersonEvents().containsKey(person.getPersonID())) {
-                            resultingEvents.add(getPersonEvents(person.getPersonID()).get(i));
-                        }
-                    }
-                }
-                if (person.getGender().equalsIgnoreCase("f")) {
-                    for (int i = 0; i < personEvents.get(person.getPersonID()).size(); i++) {
-                        if (getAllPersonEvents().containsKey(person.getPersonID())) {
-                            resultingEvents.add(getPersonEvents(person.getPersonID()).get(i));
-                        }
-                    }
+        if (!maleEventsToggled) {
+            for (int i = 0; i < resultingEvents.size(); i++) {
+                Person currentPerson = personMap.get(resultingEvents.get(i).getPersonID());
+                if (currentPerson.getGender().equalsIgnoreCase("m")) {
+                    resultingEvents.remove(i);
+                    i--;
                 }
             }
         }
-        else if (showMaleEvents) { /* CASE MALES */
-            for (Person person : personMap.values()) {
-                if (person.getGender().equalsIgnoreCase("m")) {
-                    for (int i = 0; i < personEvents.get(person.getPersonID()).size(); i++) {
-                        if (getAllPersonEvents().containsKey(person.getPersonID())) {
-                            resultingEvents.add(getPersonEvents(person.getPersonID()).get(i));
-                        }
-                    }
+        if (!femaleEventsToggled) {
+            for (int i = 0; i < resultingEvents.size(); i++) {
+                Person currentPerson = personMap.get(resultingEvents.get(i).getPersonID());
+                if (currentPerson.getGender().equalsIgnoreCase("f")) {
+                    resultingEvents.remove(i);
+                    i--;
                 }
             }
         }
-        else if (showFemaleEvents) { /* CASE FEMALES */
-            for (Person person : personMap.values()) {
-                if (person.getGender().equalsIgnoreCase("f")) {
-                    for (int i = 0; i < personEvents.get(person.getPersonID()).size(); i++) {
-                        if (getAllPersonEvents().containsKey(person.getPersonID())) {
-                            resultingEvents.add(getPersonEvents(person.getPersonID()).get(i));
-                        }
-                    }
-                }
-            }
-        }
-
         return resultingEvents;
     }
 
 
-    private ArrayList<Event> filterParents(String personID) {
-        ArrayList<Event> parentEvents;
+    private void filterParents(ArrayList<Event> parentArray, String personID) {
+        Person tempPerson = personMap.get(personID); // Mother or Father of current user
 
-        Person tempPerson = personMap.get(personID);
+        parentArray.addAll(personEvents.get(tempPerson.getFatherID())); //Grandparents
+        parentArray.addAll(personEvents.get(tempPerson.getMotherID())); //Grandparents
 
-        parentEvents = personEvents.get(personID);
-
-        for (Event event : parentEvents) {
-            allFilteredParentEvents.add(event);
-        }
+        String fatherID;
+        String motherID;
 
         if (tempPerson.getFatherID() != null) {
-            filterParents(tempPerson.getFatherID());
+            tempPerson = personMap.get(tempPerson.getFatherID());
+            fatherID = tempPerson.getFatherID();
+
+            if (fatherID != null) {
+                filterParents(parentArray, fatherID);
+            }
         }
         if (tempPerson.getMotherID() != null) {
-            filterParents(tempPerson.getMotherID());
-        }
+            tempPerson = personMap.get(tempPerson.getMotherID());
+            motherID = tempPerson.getMotherID();
 
-        return allFilteredParentEvents;
+            if (motherID != null) {
+                filterParents(parentArray, motherID);
+            }
+        }
     }
 }
