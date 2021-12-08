@@ -103,6 +103,7 @@ public class RegisterTask implements Runnable {
             }
 
             personRegistered = dataCache.getPersonMap().get(registerResult.getPersonID());
+            dataCache.setLoggedInUser(personRegistered.getPersonID());
 
             sendMessage("OK. Register was successful." +
                     "\nWelcome " + personRegistered.getFirstName() + " " + personRegistered.getLastName() + "!");
