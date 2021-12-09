@@ -95,6 +95,22 @@ public class LoginTask implements Runnable {
                 }
             }
 
+            for (Map.Entry mapItem : dataCache.getAllPersonEvents().entrySet()) {
+                ArrayList<Event> events = (ArrayList<Event>) mapItem.getValue();
+                for (Event event : events) {
+                    if (event.getYear() < events.get(0).getYear()) {
+                        events.remove(event);
+                        events.add(0, event);
+                    }
+                    else if (event.getYear() == events.get(0).getYear()) {
+                        if (event.getEventType().compareTo(events.get(0).getEventType()) < 0) {
+                            events.remove(event);
+                            events.add(0, event);
+                        }
+                    }
+                }
+            }
+
             personLoggedIn = dataCache.getPersonMap().get(loginResult.getPersonID());
             dataCache.setLoggedInUser(personLoggedIn.getPersonID());
 

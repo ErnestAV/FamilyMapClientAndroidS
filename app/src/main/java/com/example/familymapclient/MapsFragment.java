@@ -6,6 +6,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
@@ -47,6 +50,10 @@ public class MapsFragment extends Fragment {
     String personID;
 
     GoogleMap savedGoogleMap;
+    Integer generation = 40;
+
+    ArrayList<Polyline> allPolyLines = new ArrayList<>();
+
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -134,6 +141,7 @@ public class MapsFragment extends Fragment {
                         genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_male, null));
                     }
 
+                    drawLines(eventSelected);
                     return false;
                 }
             });
@@ -250,6 +258,85 @@ public class MapsFragment extends Fragment {
                 }
             }
             dataCache.getTypeEventMap().clear();
+        }
+    }
+
+    /* DRAWING LINES */
+    private void drawSpouseLines(Event currentEvent) {
+        for (Event event : dataCache.getAllFilteredEvents().values()) {
+            String personID = currentEvent.getPersonID();
+            String spouseID = dataCache.getPersonMap().get(event.getPersonID()).getSpouseID();
+
+            if (spouseID.equals(personID)) {
+                LatLng currentEventLocation = new LatLng(currentEvent.getLatitude(), currentEvent.getLongitude());
+                Event spouseRootEvent = dataCache.getAllPersonEvents().get(event.getPersonID()).get(0);
+                LatLng spouseRootEventLocation = new LatLng(spouseRootEvent.getLatitude(), spouseRootEvent.getLongitude());
+                Polyline createdSpouseLine = savedGoogleMap.addPolyline(new PolylineOptions().add(currentEventLocation, spouseRootEventLocation).width(10).color(Color.BLUE));
+                allPolyLines.add(createdSpouseLine);
+            }
+        }
+    }
+
+    private void drawLifeStoriesLines(Event currentEvent) {
+        ArrayList<Event> eventsOfPerson = dataCache.getAllPersonEvents().get(currentEvent.getPersonID());
+        ArrayList<LatLng> locations = new ArrayList<>();
+
+        for (Event event : eventsOfPerson) {
+            LatLng eventToAdd = new LatLng(event.getLatitude(), event.getLongitude());
+            locations.add(eventToAdd);
+        }
+
+        for (int i = 0; i < locations.size() - 1; i++) {
+            Polyline createLifeStoryLine = savedGoogleMap.addPolyline(new PolylineOptions().add(locations.get(i), locations.get(i+1)).width(20).color(Color.MAGENTA));
+            allPolyLines.add(createLifeStoryLine);
+        }
+    }
+
+    private void drawFamilyLines(Event currentEvent, int generationPassed) {
+        Person selectedPerson = dataCache.getPersonMap().get(currentEvent.getPersonID());
+        LatLng currentLocation = new LatLng(currentEvent.getLatitude(), currentEvent.getLongitude());
+
+        if (selectedPerson.getFatherID() != null && dataCache.isMaleEventsToggled()) {
+            if (generation == generationPassed && !dataCache.isFatherSideToggled()) {
+                System.out.println("");
+            } else {
+                Event fatherFirstEvent = dataCache.filterPersonEvents(selectedPerson.getFatherID()).get(0);
+
+                LatLng fatherLocation = new LatLng(fatherFirstEvent.getLatitude(), fatherFirstEvent.getLongitude());
+                Polyline createFamilyLine = savedGoogleMap.addPolyline(new PolylineOptions().add(currentLocation, fatherLocation).width(generationPassed).color(Color.RED));
+                allPolyLines.add(createFamilyLine);
+                drawFamilyLines(fatherFirstEvent, generationPassed - 10);
+            }
+        }
+
+        if (selectedPerson.getMotherID() != null && dataCache.isFemaleEventsToggled()) {
+            if (generation == generationPassed && !dataCache.isMotherSideToggled()) {
+                System.out.println("");
+            } else {
+                Event motherFirstEvent = dataCache.filterPersonEvents(selectedPerson.getMotherID()).get(0);
+
+                LatLng motherLocation = new LatLng(motherFirstEvent.getLatitude(), motherFirstEvent.getLongitude());
+                Polyline createFamilyLine = savedGoogleMap.addPolyline(new PolylineOptions().add(currentLocation, motherLocation).width(generationPassed).color(Color.RED));
+                allPolyLines.add(createFamilyLine);
+                drawFamilyLines(motherFirstEvent, generationPassed - 10);
+            }
+        }
+    }
+
+    private void drawLines(Event currentEvent) {
+        for (Polyline polyline : allPolyLines) {
+            polyline.remove();
+        }
+        allPolyLines.clear();
+
+        if (dataCache.isShowSpouseLines()) {
+            drawSpouseLines(currentEvent);
+        }
+        if (dataCache.isShowLifeStoryLines()) {
+            drawLifeStoriesLines(currentEvent);
+        }
+        if (dataCache.isShowFamilyTreeLines()) {
+            drawFamilyLines(currentEvent, generation);
         }
     }
 }
