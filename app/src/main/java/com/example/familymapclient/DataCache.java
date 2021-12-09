@@ -357,22 +357,29 @@ public class DataCache {
         for (Event event : resultArray) {
             if (!femaleEventsToggled) {
                 if (femaleEvents.contains(event)) {
-                    resultArray.remove(event);
+                    //if (resultArray.size() == 1) {
+                        //resultArray.remove(event);
+                    //} else {
+                        return new ArrayList<Event>();
+                    //}
                 }
             }
             if (!maleEventsToggled) {
                 if (maleEvents.contains(event)) {
-                    resultArray.remove(event);
+                    //resultArray.remove(event);
+                    return new ArrayList<Event>();
                 }
             }
             if (!motherSideToggled) {
                 if (motherSideEvents.contains(event)) {
-                    resultArray.remove(event);
+                    //resultArray.remove(event);
+                    return new ArrayList<Event>();
                 }
             }
             if (!fatherSideToggled) {
                 if (fatherSideEvents.contains(event)) {
-                    resultArray.remove(event);
+                    //resultArray.remove(event);
+                    return new ArrayList<Event>();
                 }
             }
         }

@@ -67,7 +67,7 @@ public class MapsFragment extends Fragment {
             dataCache.filterEvents();
 
             Float color = 0f;
-            for (Event event : dataCache.getEventMap().values()) {
+            for (Event event : dataCache.getAllFilteredEvents().values()) {
                 LatLng eventLocation = new LatLng(event.getLatitude(), event.getLongitude());
                 Marker marker = googleMap.addMarker(new MarkerOptions().position(eventLocation).title(event.getCity() + ", " + event.getCountry()));
                 if (marker != null) { // If event is already in the EventType map
