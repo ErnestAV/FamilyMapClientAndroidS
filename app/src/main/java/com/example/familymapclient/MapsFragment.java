@@ -112,11 +112,14 @@ public class MapsFragment extends Fragment {
                     } else {
                         genderImage.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_person_male, null));
                     }
+                    drawLines(eventFromEventActivity);
                 }
                 else  {
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(eventLocation));
                     setHasOptionsMenu(true);
+//                    drawLines(event); NOT HERE
                 }
+//                drawLines(event); NOT HERE
             }
             dataCache.getTypeEventMap().clear();
 
@@ -124,6 +127,8 @@ public class MapsFragment extends Fragment {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                     Event eventSelected = (Event) marker.getTag();
+                    dataCache.setStoredEventGlobal(eventSelected);
+
                     DataCache dataCache = DataCache.getInstance();
 
                     personID = eventSelected.getPersonID();
@@ -257,6 +262,7 @@ public class MapsFragment extends Fragment {
                     System.out.println("Marker is null");
                 }
             }
+            drawLines(dataCache.getStoredEventGlobal());
             dataCache.getTypeEventMap().clear();
         }
     }

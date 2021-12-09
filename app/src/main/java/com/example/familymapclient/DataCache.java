@@ -386,6 +386,16 @@ public class DataCache {
         return resultArray;
     }
 
+    public Event getStoredEventGlobal() {
+        return storedEventGlobal;
+    }
+
+    public void setStoredEventGlobal(Event storedEventGlobal) {
+        this.storedEventGlobal = storedEventGlobal;
+    }
+
+    Event storedEventGlobal;
+
 /*
     public ArrayList<Event> categorizeEvents(Map<String, ArrayList<Event>> personEvents) {
 
