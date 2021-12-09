@@ -44,10 +44,12 @@ public class PersonActivity extends AppCompatActivity {
             personID = bundleExtras.getString("PersonID");
         }
 
+        personSelected = dataCache.getPersonMap().get(personID);
+
         ExpandableListView expandableListView = findViewById(R.id.expandableListView);
 
         ArrayList<FamilyRelations> familyRelations = dataCache.getFamilyRelations(personID);
-        ArrayList<Event> allEvents = dataCache.getPersonEvents(personID);
+        ArrayList<Event> allEvents = dataCache.getFilteredPersonEvents().get(personSelected.getPersonID());
 
         expandableListView.setAdapter(new ExpandableListAdapter(allEvents, familyRelations));
 
@@ -56,7 +58,6 @@ public class PersonActivity extends AppCompatActivity {
         TextView lastNameTextView = findViewById(R.id.ActualLastName);
         TextView genderTextView = findViewById(R.id.ActualGender);
 
-        personSelected = dataCache.getPersonMap().get(personID);
         if (personSelected != null) {
             firstNameTextView.setText(personSelected.getFirstName());
             lastNameTextView.setText(personSelected.getLastName());

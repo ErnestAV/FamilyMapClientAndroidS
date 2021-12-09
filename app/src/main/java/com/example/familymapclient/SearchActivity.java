@@ -39,7 +39,8 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
 
         ArrayList<Person> allPeople = dataCache.getPersonsToSearch();
-        ArrayList<Event> allEvents = dataCache.getEventsToSearch();
+        ArrayList<Event> allEvents = new ArrayList<>();
+        allEvents.addAll(dataCache.getAllFilteredEvents().values());
 
         searchView = findViewById(R.id.SearchViewID);
         searchView.setQueryHint("Search...");

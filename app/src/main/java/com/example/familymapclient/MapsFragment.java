@@ -32,6 +32,7 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 import model.Event;
@@ -62,6 +63,9 @@ public class MapsFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             savedGoogleMap = googleMap;
+
+            dataCache.filterEvents();
+
             Float color = 0f;
             for (Event event : dataCache.getEventMap().values()) {
                 LatLng eventLocation = new LatLng(event.getLatitude(), event.getLongitude());
@@ -107,6 +111,7 @@ public class MapsFragment extends Fragment {
                     setHasOptionsMenu(true);
                 }
             }
+            dataCache.getTypeEventMap().clear();
 
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
@@ -223,29 +228,28 @@ public class MapsFragment extends Fragment {
 
             Float color = 0f;
 
-            ArrayList<Event> allEvents = dataCache.categorizeEvents(dataCache.getAllPersonEvents());
+            dataCache.filterEvents();
 
-            if (allEvents == null) {
-                savedGoogleMap.clear();
-            }
-            else {
-                for (int i = 0; i < allEvents.size(); i++) {
-                    LatLng eventLocation = new LatLng(allEvents.get(i).getLatitude(), allEvents.get(i).getLongitude());
-                    Marker marker = savedGoogleMap.addMarker(new MarkerOptions().position(eventLocation).title(allEvents.get(i).getCity() + ", " + allEvents.get(i).getCountry()));
-                    if (marker != null) { // If event is already in the EventType map
-                        if (dataCache.getTypeEventMap().containsKey(allEvents.get(i).getEventType().toLowerCase())) {
-                            marker.setIcon(BitmapDescriptorFactory.defaultMarker(dataCache.getTypeEventMap().get(allEvents.get(i).getEventType().toLowerCase())));
-                        } else { // If event does not exist
-                            color = color + 30f;
-                            dataCache.getTypeEventMap().put(allEvents.get(i).getEventType().toLowerCase(), color);
-                            marker.setIcon(BitmapDescriptorFactory.defaultMarker(dataCache.getTypeEventMap().get(allEvents.get(i).getEventType().toLowerCase())));
-                        }
-                        marker.setTag(allEvents.get(i));
-                    } else {
-                        System.out.println("Marker is null");
+//            if (dataCache.getAllFilteredEvents() == null) {
+//                savedGoogleMap.clear();
+//            }
+            for (Event event : dataCache.getAllFilteredEvents().values()) {
+                LatLng eventLocation = new LatLng(event.getLatitude(), event.getLongitude());
+                Marker marker = savedGoogleMap.addMarker(new MarkerOptions().position(eventLocation).title(event.getCity() + ", " + event.getCountry()));
+                if (marker != null) { // If event is already in the EventType map
+                    if (dataCache.getTypeEventMap().containsKey(event.getEventType().toLowerCase())) {
+                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(dataCache.getTypeEventMap().get(event.getEventType().toLowerCase())));
+                    } else { // If event does not exist
+                        color = color + 30f;
+                        dataCache.getTypeEventMap().put(event.getEventType().toLowerCase(), color);
+                        marker.setIcon(BitmapDescriptorFactory.defaultMarker(dataCache.getTypeEventMap().get(event.getEventType().toLowerCase())));
                     }
+                    marker.setTag(event);
+                } else {
+                    System.out.println("Marker is null");
                 }
             }
+            dataCache.getTypeEventMap().clear();
         }
     }
 }

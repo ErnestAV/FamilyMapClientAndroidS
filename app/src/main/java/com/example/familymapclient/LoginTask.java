@@ -98,6 +98,11 @@ public class LoginTask implements Runnable {
             personLoggedIn = dataCache.getPersonMap().get(loginResult.getPersonID());
             dataCache.setLoggedInUser(personLoggedIn.getPersonID());
 
+            dataCache.findFatherSideEvents(personLoggedIn.getPersonID());
+            dataCache.findMotherSideEvents(personLoggedIn.getPersonID());
+            dataCache.findMaleEvents();
+            dataCache.findFemaleEvents();
+
             sendMessage("OK. Login was successful." +
                     "\nWelcome " + personLoggedIn.getFirstName() + " " + personLoggedIn.getLastName() + "!");
         }

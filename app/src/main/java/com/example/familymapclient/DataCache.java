@@ -32,9 +32,33 @@ public class DataCache {
     private Map<String, Person> personMap = new HashMap<>();
     private Map<String, Event> eventMap = new HashMap<>();
     private Map<String, ArrayList<Event>> personEvents = new HashMap<>();
+
+    public Map<String, ArrayList<Event>> getFilteredPersonEvents() {
+        return filteredPersonEvents;
+    }
+
+    public void setFilteredPersonEvents(Map<String, ArrayList<Event>> filteredPersonEvents) {
+        this.filteredPersonEvents = filteredPersonEvents;
+    }
+
+    private Map<String, ArrayList<Event>> filteredPersonEvents = new HashMap<>();
+
+    public Map<String, Event> getAllFilteredEvents() {
+        return allFilteredEvents;
+    }
+
+    public void setAllFilteredEvents(Map<String, Event> allFilteredEvents) {
+        this.allFilteredEvents = allFilteredEvents;
+    }
+
+    private Map<String, Event> allFilteredEvents = new HashMap<>();
     private Map<String, Float> typeEventMap = new HashMap<>();
-    private ArrayList<Event> fatherEvents = new ArrayList<>();
-    private ArrayList<Event> motherEvents = new ArrayList<>();
+
+    private ArrayList<Event> fatherSideEvents = new ArrayList<>();
+    private ArrayList<Event> motherSideEvents = new ArrayList<>();
+    private ArrayList<Event> maleEvents = new ArrayList<>();
+    private ArrayList<Event> femaleEvents = new ArrayList<>();
+
 
     /* PERSON */
     public Map<String, Person> getPersonMap() {
@@ -224,6 +248,111 @@ public class DataCache {
         this.femaleEventsToggled = femaleEventsToggled;
     }
 
+    /** FILTERING **/
+
+    private boolean isMaleEventFunction(Event event) {
+        Person currentPerson = personMap.get(event.getPersonID());
+
+        if (currentPerson.getGender().equalsIgnoreCase("m")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private boolean isFemaleEventFunction(Event event) {
+        Person currentPerson = personMap.get(event.getPersonID());
+
+        if (currentPerson.getGender().equalsIgnoreCase("f")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public void findFatherSideEvents(String personID) {
+        Person currentPerson = personMap.get(personID);
+        findFatherSideEventsHelper(currentPerson.getFatherID());
+    }
+
+    private void findFatherSideEventsHelper(String personID) {
+        Person currentPerson = personMap.get(personID);
+        fatherSideEvents.addAll(personEvents.get(currentPerson.getPersonID()));
+        if (currentPerson.getFatherID() != null) {
+            findFatherSideEventsHelper(currentPerson.getFatherID());
+        }
+        if (currentPerson.getMotherID() != null) {
+            findFatherSideEventsHelper(currentPerson.getMotherID());
+        }
+    }
+
+    public void findMotherSideEvents(String personID) {
+        Person currentPerson = personMap.get(personID);
+        findMotherSideEventsHelper(currentPerson.getMotherID());
+    }
+
+    private void findMotherSideEventsHelper(String personID) {
+        Person currentPerson = personMap.get(personID);
+        motherSideEvents.addAll(personEvents.get(currentPerson.getPersonID()));
+        if (currentPerson.getFatherID() != null) {
+            findMotherSideEventsHelper(currentPerson.getFatherID());
+        }
+        if (currentPerson.getMotherID() != null) {
+            findMotherSideEventsHelper(currentPerson.getMotherID());
+        }
+    }
+
+    public void findMaleEvents() {
+        for (Event event : eventMap.values()) {
+            if (isMaleEventFunction(event)) {
+                maleEvents.add(event);
+            }
+        }
+    }
+
+    public void findFemaleEvents() {
+        for (Event event : eventMap.values()) {
+            if (isFemaleEventFunction(event)) {
+                femaleEvents.add(event);
+            }
+        }
+    }
+
+    public void filterEvents() {
+        allFilteredEvents.putAll(eventMap);
+        filteredPersonEvents.putAll(personEvents);
+
+        for (Event currentEvent : eventMap.values()) {
+            if (!femaleEventsToggled) {
+                if (femaleEvents.contains(currentEvent)) {
+                    allFilteredEvents.remove(currentEvent.getEventID());
+                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
+                }
+            }
+            if (!maleEventsToggled) {
+                if (maleEvents.contains(currentEvent)) {
+                    allFilteredEvents.remove(currentEvent.getEventID());
+                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
+                }
+            }
+            if (!motherSideToggled) {
+                if (motherSideEvents.contains(currentEvent)) {
+                    allFilteredEvents.remove(currentEvent.getEventID());
+                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
+                }
+            }
+            if (!fatherSideToggled) {
+                if (fatherSideEvents.contains(currentEvent)) {
+                    allFilteredEvents.remove(currentEvent.getEventID());
+                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
+                }
+            }
+        }
+    }
+
+/*
     public ArrayList<Event> categorizeEvents(Map<String, ArrayList<Event>> personEvents) {
 
         //Data Structures
@@ -233,7 +362,7 @@ public class DataCache {
         ArrayList<Event> personRootSpouseEvents = new ArrayList<>();
         ArrayList<Event> resultingEvents = new ArrayList<>();
 
-        /* GET FATHER AND MOTHER SIDES TO USE IN EVERY CASE */
+        /* GET FATHER AND MOTHER SIDES TO USE IN EVERY CASE
         String mother = personMap.get(loggedInUser).getMotherID();
         motherEvents.addAll(personEvents.get(mother));
         filterParents(motherEvents, mother);
@@ -296,9 +425,9 @@ public class DataCache {
             }
         }
         return resultingEvents;
-    }
+    }*/
 
-
+/*
     private void filterParents(ArrayList<Event> parentArray, String personID) {
         Person tempPerson = personMap.get(personID); // Mother or Father of current user
 
@@ -324,5 +453,5 @@ public class DataCache {
                 filterParents(parentArray, motherID);
             }
         }
-    }
+    }*/
 }

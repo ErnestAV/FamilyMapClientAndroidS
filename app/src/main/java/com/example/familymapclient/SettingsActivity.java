@@ -141,6 +141,7 @@ public class SettingsActivity extends AppCompatActivity {
         if(item.getItemId() == android.R.id.home)  {
             intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            dataCache.filterEvents();
             startActivity(intent);
         }
         return true;
