@@ -49,7 +49,7 @@ public class PersonActivity extends AppCompatActivity {
         ExpandableListView expandableListView = findViewById(R.id.expandableListView);
 
         ArrayList<FamilyRelations> familyRelations = dataCache.getFamilyRelations(personID);
-        ArrayList<Event> allEvents = dataCache.getFilteredPersonEvents().get(personSelected.getPersonID());
+        ArrayList<Event> allEvents = dataCache.filterPersonEvents(personID);
 
         expandableListView.setAdapter(new ExpandableListAdapter(allEvents, familyRelations));
 

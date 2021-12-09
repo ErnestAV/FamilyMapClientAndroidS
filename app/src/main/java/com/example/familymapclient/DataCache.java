@@ -322,34 +322,61 @@ public class DataCache {
 
     public void filterEvents() {
         allFilteredEvents.putAll(eventMap);
-        filteredPersonEvents.putAll(personEvents);
+//        filteredPersonEvents.putAll(personEvents);
 
         for (Event currentEvent : eventMap.values()) {
             if (!femaleEventsToggled) {
                 if (femaleEvents.contains(currentEvent)) {
                     allFilteredEvents.remove(currentEvent.getEventID());
-                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
+//                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
                 }
             }
             if (!maleEventsToggled) {
                 if (maleEvents.contains(currentEvent)) {
                     allFilteredEvents.remove(currentEvent.getEventID());
-                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
+//                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
                 }
             }
             if (!motherSideToggled) {
                 if (motherSideEvents.contains(currentEvent)) {
                     allFilteredEvents.remove(currentEvent.getEventID());
-                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
+//                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
                 }
             }
             if (!fatherSideToggled) {
                 if (fatherSideEvents.contains(currentEvent)) {
                     allFilteredEvents.remove(currentEvent.getEventID());
-                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
+//                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
                 }
             }
         }
+    }
+
+    public ArrayList<Event> filterPersonEvents(String personID) {
+        ArrayList<Event> resultArray = new ArrayList<>(personEvents.get(personID));
+        for (Event event : resultArray) {
+            if (!femaleEventsToggled) {
+                if (femaleEvents.contains(event)) {
+                    resultArray.remove(event);
+                }
+            }
+            if (!maleEventsToggled) {
+                if (maleEvents.contains(event)) {
+                    resultArray.remove(event);
+                }
+            }
+            if (!motherSideToggled) {
+                if (motherSideEvents.contains(event)) {
+                    resultArray.remove(event);
+                }
+            }
+            if (!fatherSideToggled) {
+                if (fatherSideEvents.contains(event)) {
+                    resultArray.remove(event);
+                }
+            }
+        }
+        return resultArray;
     }
 
 /*
