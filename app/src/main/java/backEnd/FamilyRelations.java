@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package backEnd;
 
 import model.Person;
 

@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package com.example.familymapclient.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +16,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+
+import com.example.familymapclient.R;
+
 import java.util.ArrayList;
+
+import backEnd.DataCache;
 import model.Event;
 import model.Person;
 

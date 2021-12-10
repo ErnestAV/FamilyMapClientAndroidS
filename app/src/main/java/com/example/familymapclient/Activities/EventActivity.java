@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package com.example.familymapclient.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,6 +6,11 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import com.example.familymapclient.Fragments.MapsFragment;
+import com.example.familymapclient.R;
+
+import backEnd.DataCache;
 
 public class EventActivity extends AppCompatActivity {
     DataCache dataCache = DataCache.getInstance();

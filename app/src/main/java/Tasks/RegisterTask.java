@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package Tasks;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import backEnd.DataCache;
+import backEnd.ServerProxy;
 import model.Event;
 import model.Person;
 import request.EventRequest;

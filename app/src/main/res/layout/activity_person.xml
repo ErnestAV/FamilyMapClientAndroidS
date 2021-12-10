@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingLeft="10px"
-    tools:context=".PersonActivity">
+    tools:context=".Activities.PersonActivity">
 
     <TextView
         android:id="@+id/ActualFirstName"

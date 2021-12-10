@@ -1,31 +1,17 @@
 package com.example.familymapclient;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.TestInfo;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.UUID;
-import java.util.logging.Logger;
 
-import model.User;
+import backEnd.ServerProxy;
 import request.EventRequest;
-import request.LoadRequest;
 import request.LoginRequest;
 import request.PersonRequest;
 import request.RegisterRequest;

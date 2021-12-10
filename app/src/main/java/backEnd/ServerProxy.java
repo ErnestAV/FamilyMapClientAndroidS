@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package backEnd;
 
 import com.google.gson.Gson;
 import java.io.*;
@@ -14,7 +14,7 @@ import result.RegisterResult;
 
 public class ServerProxy {
 
-    LoginResult login(LoginRequest loginR, String serverHost, String serverPort) {
+    public LoginResult login(LoginRequest loginR, String serverHost, String serverPort) {
         LoginResult loginResult = new LoginResult(null);
 
         try {
@@ -65,7 +65,7 @@ public class ServerProxy {
         return loginResult;
     }
 
-    RegisterResult register(RegisterRequest registerRequest, String serverHost, String serverPort) {
+    public RegisterResult register(RegisterRequest registerRequest, String serverHost, String serverPort) {
         RegisterResult registerResult = new RegisterResult();
 
         try {
@@ -115,7 +115,7 @@ public class ServerProxy {
         return registerResult;
     }
 
-    PersonResult person(PersonRequest personRequest, String serverHost, String serverPort, String authToken) {
+    public PersonResult person(PersonRequest personRequest, String serverHost, String serverPort, String authToken) {
         PersonResult personResult = new PersonResult("Person result is Null");
         Gson gson = new Gson();
 
@@ -163,7 +163,7 @@ public class ServerProxy {
         return personResult;
     }
 
-    EventResult event(EventRequest eventRequest, String serverHost, String serverPort, String authToken) {
+    public EventResult event(EventRequest eventRequest, String serverHost, String serverPort, String authToken) {
         EventResult eventResult = new EventResult("Event Result is Null");
         Gson gson = new Gson();
 

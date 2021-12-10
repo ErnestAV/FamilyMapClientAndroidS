@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package com.example.familymapclient.Fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +17,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.familymapclient.Activities.PersonActivity;
+import com.example.familymapclient.Activities.SearchActivity;
+import com.example.familymapclient.Activities.SettingsActivity;
+import com.example.familymapclient.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +35,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import java.util.ArrayList;
+
+import backEnd.DataCache;
 import model.Event;
 import model.Person;
 

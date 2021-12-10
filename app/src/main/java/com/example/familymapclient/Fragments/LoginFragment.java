@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package com.example.familymapclient.Fragments;
 
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+
+import Tasks.LoginTask;
+import com.example.familymapclient.R;
+import Tasks.RegisterTask;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

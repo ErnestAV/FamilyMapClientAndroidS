@@ -1,4 +1,4 @@
-package com.example.familymapclient;
+package backEnd;
 
 import java.util.ArrayList;
 import java.util.HashMap;

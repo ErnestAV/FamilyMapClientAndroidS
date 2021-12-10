@@ -1,10 +1,14 @@
-package com.example.familymapclient;
+package com.example.familymapclient.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.example.familymapclient.Fragments.LoginFragment;
+import com.example.familymapclient.Fragments.MapsFragment;
+import com.example.familymapclient.R;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
