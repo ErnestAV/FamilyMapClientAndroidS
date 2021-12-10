@@ -4,11 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,12 +17,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -32,12 +29,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
-
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
-
 import model.Event;
 import model.Person;
 
@@ -57,16 +49,7 @@ public class MapsFragment extends Fragment {
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-
+        @SuppressLint("SetTextI18n")
         @Override
         public void onMapReady(GoogleMap googleMap) {
             savedGoogleMap = googleMap;
@@ -117,13 +100,12 @@ public class MapsFragment extends Fragment {
                 else  {
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(eventLocation));
                     setHasOptionsMenu(true);
-//                    drawLines(event); NOT HERE
                 }
-//                drawLines(event); NOT HERE
             }
             dataCache.getTypeEventMap().clear();
 
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @SuppressLint("SetTextI18n")
                 @Override
                 public boolean onMarkerClick(Marker marker) {
                     Event eventSelected = (Event) marker.getTag();
@@ -154,6 +136,7 @@ public class MapsFragment extends Fragment {
     };
 
 
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -191,7 +174,6 @@ public class MapsFragment extends Fragment {
         }
     }
 
-    //Override onCreateOptionsMenu(Menu)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -209,8 +191,6 @@ public class MapsFragment extends Fragment {
                 .actionBarSize());
     }
 
-
-    //Override onOptionsItemSelected(MenuItem)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -243,16 +223,13 @@ public class MapsFragment extends Fragment {
 
             dataCache.filterEvents();
 
-//            if (dataCache.getAllFilteredEvents() == null) {
-//                savedGoogleMap.clear();
-//            }
             for (Event event : dataCache.getAllFilteredEvents().values()) {
                 LatLng eventLocation = new LatLng(event.getLatitude(), event.getLongitude());
                 Marker marker = savedGoogleMap.addMarker(new MarkerOptions().position(eventLocation).title(event.getCity() + ", " + event.getCountry()));
-                if (marker != null) { // If event is already in the EventType map
+                if (marker != null) {
                     if (dataCache.getTypeEventMap().containsKey(event.getEventType().toLowerCase())) {
                         marker.setIcon(BitmapDescriptorFactory.defaultMarker(dataCache.getTypeEventMap().get(event.getEventType().toLowerCase())));
-                    } else { // If event does not exist
+                    } else {
                         color = color + 30f;
                         dataCache.getTypeEventMap().put(event.getEventType().toLowerCase(), color);
                         marker.setIcon(BitmapDescriptorFactory.defaultMarker(dataCache.getTypeEventMap().get(event.getEventType().toLowerCase())));
@@ -268,6 +245,7 @@ public class MapsFragment extends Fragment {
     }
 
     /* DRAWING LINES */
+
     private void drawSpouseLines(Event currentEvent) {
         for (Event event : dataCache.getAllFilteredEvents().values()) {
             String personID = currentEvent.getPersonID();

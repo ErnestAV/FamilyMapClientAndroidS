@@ -15,15 +15,7 @@ public class FamilyRelations {
         return personSelected;
     }
 
-    public void setPersonSelected(Person personSelected) {
-        this.personSelected = personSelected;
-    }
-
     public String getRelationshipType() {
         return relationshipType;
-    }
-
-    public void setRelationshipType(String relationshipType) {
-        this.relationshipType = relationshipType;
     }
 }

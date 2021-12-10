@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,10 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-
 import model.Event;
 import model.Person;
 
@@ -25,7 +24,6 @@ public class SearchActivity extends AppCompatActivity {
 
     SearchView searchView;
     DataCache dataCache = DataCache.getInstance();
-    String personID;
 
     private static final int PERSON_ITEM_VIEW_TYPE = 0;
     private static final int EVENT_ITEM_VIEW_TYPE = 1;
@@ -59,7 +57,6 @@ public class SearchActivity extends AppCompatActivity {
                     recyclerView.setAdapter(newAdapterReset);
                 }
                 else {
-                    //Add FILTERING functions (people & events)
                     final ArrayList<Person> filteredPeople = filterPeople(allPeople, newText); //USE FILTERING FUNCTIONS
                     final ArrayList<Event> filteredEvents = filterEvents(allEvents, newText); //USE FILTERING FUNCTIONS
 
@@ -199,6 +196,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
 
+        @SuppressLint("SetTextI18n")
         private void bind(Event event) {
             this.event = event;
             imageView.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_marker_event, null));

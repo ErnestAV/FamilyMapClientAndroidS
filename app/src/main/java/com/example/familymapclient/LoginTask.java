@@ -3,12 +3,9 @@ package com.example.familymapclient;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
 import model.Event;
 import model.Person;
 import request.EventRequest;

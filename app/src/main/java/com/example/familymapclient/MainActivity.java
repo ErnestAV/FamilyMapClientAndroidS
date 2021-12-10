@@ -3,14 +3,10 @@ package com.example.familymapclient;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
 import android.os.Bundle;
 import android.widget.Toast;
-
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
-
-import result.LoginResult;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.Listener {
 

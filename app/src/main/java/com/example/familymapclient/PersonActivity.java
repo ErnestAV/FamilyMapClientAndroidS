@@ -1,14 +1,12 @@
 package com.example.familymapclient;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +14,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import model.Event;
 import model.Person;
 
@@ -183,6 +178,7 @@ public class PersonActivity extends AppCompatActivity {
             return itemView;
         }
 
+        @SuppressLint("SetTextI18n")
         public void initializeLifeEventsView(View lifeEventsItemView, final int childPosition) {
             ImageView lifeEventImageView = lifeEventsItemView.findViewById(R.id.lifeEventImageView);
             lifeEventImageView.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_marker_event, null));
@@ -208,6 +204,7 @@ public class PersonActivity extends AppCompatActivity {
             });
         }
 
+        @SuppressLint("SetTextI18n")
         public void initializeFamilyRelationsView(View familyItemView, final int childPosition) {
             ImageView familyItemImageView = familyItemView.findViewById(R.id.personImageView);
             if (familyRelations.get(childPosition).getPersonSelected().getGender().equalsIgnoreCase("f")) {

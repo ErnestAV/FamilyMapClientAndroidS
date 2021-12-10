@@ -1,11 +1,8 @@
 package com.example.familymapclient;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-
 import model.Event;
 import model.Person;
 
@@ -19,10 +16,6 @@ public class DataCache {
 
     private String loggedInUser;
 
-    public String getLoggedInUser() {
-        return loggedInUser;
-    }
-
     public void setLoggedInUser(String loggedInUser) {
         this.loggedInUser = loggedInUser;
     }
@@ -33,22 +26,10 @@ public class DataCache {
     private Map<String, Event> eventMap = new HashMap<>();
     private Map<String, ArrayList<Event>> personEvents = new HashMap<>();
 
-    public Map<String, ArrayList<Event>> getFilteredPersonEvents() {
-        return filteredPersonEvents;
-    }
-
-    public void setFilteredPersonEvents(Map<String, ArrayList<Event>> filteredPersonEvents) {
-        this.filteredPersonEvents = filteredPersonEvents;
-    }
-
     private Map<String, ArrayList<Event>> filteredPersonEvents = new HashMap<>();
 
     public Map<String, Event> getAllFilteredEvents() {
         return allFilteredEvents;
-    }
-
-    public void setAllFilteredEvents(Map<String, Event> allFilteredEvents) {
-        this.allFilteredEvents = allFilteredEvents;
     }
 
     private Map<String, Event> allFilteredEvents = new HashMap<>();
@@ -65,8 +46,6 @@ public class DataCache {
         return personMap;
     }
 
-    Person personRoot = personMap.get(getLoggedInUser());
-
     public void setPersonMap(Map<String, Person> personMap) {
         this.personMap = personMap;
     }
@@ -81,33 +60,10 @@ public class DataCache {
     }
 
     /* PERSON EVENTS Data Structures */
-    public ArrayList<Event> getPersonEvents(String personID) {
-        sortEvents(personEvents.get(personID));
-
-        return personEvents.get(personID);
-    }
     public Map<String, ArrayList<Event>> getAllPersonEvents() { return personEvents; }
 
     /* EVENT TYPES MAP */
     public Map<String, Float> getTypeEventMap() { return typeEventMap; }
-
-    /* SORT EVENTS IN ORDER CHRONO */
-    public void sortEvents(ArrayList<Event> allEvents) {
-        Collections.sort(allEvents, new Comparator<Event>() {
-            @Override
-            public int compare(Event o1, Event o2) {
-                if (o1.getYear() < o2.getYear()) {
-                    return -1;
-                }
-                else if (o1.getYear() == o2.getYear()) {
-                    return o1.getEventType().toLowerCase().compareTo(o2.getEventType().toLowerCase());
-                }
-                else {
-                    return 1;
-                }
-            }
-        });
-    }
 
     /* HELPER FUNCTION FOR FAMILY RELATIONS */
     public ArrayList<FamilyRelations> getFamilyRelations(String personID) {
@@ -168,10 +124,6 @@ public class DataCache {
 
     public void setPersonsToSearch(ArrayList<Person> personsToSearch) {
         this.personsToSearch = personsToSearch;
-    }
-
-    public ArrayList<Event> getEventsToSearch() {
-        return eventsToSearch;
     }
 
     public void setEventsToSearch(ArrayList<Event> eventsToSearch) {
@@ -248,7 +200,7 @@ public class DataCache {
         this.femaleEventsToggled = femaleEventsToggled;
     }
 
-    /** FILTERING **/
+    /* FILTERING */
 
     private boolean isMaleEventFunction(Event event) {
         Person currentPerson = personMap.get(event.getPersonID());
@@ -322,31 +274,25 @@ public class DataCache {
 
     public void filterEvents() {
         allFilteredEvents.putAll(eventMap);
-//        filteredPersonEvents.putAll(personEvents);
-
         for (Event currentEvent : eventMap.values()) {
             if (!femaleEventsToggled) {
                 if (femaleEvents.contains(currentEvent)) {
                     allFilteredEvents.remove(currentEvent.getEventID());
-//                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
                 }
             }
             if (!maleEventsToggled) {
                 if (maleEvents.contains(currentEvent)) {
                     allFilteredEvents.remove(currentEvent.getEventID());
-//                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
                 }
             }
             if (!motherSideToggled) {
                 if (motherSideEvents.contains(currentEvent)) {
                     allFilteredEvents.remove(currentEvent.getEventID());
-//                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
                 }
             }
             if (!fatherSideToggled) {
                 if (fatherSideEvents.contains(currentEvent)) {
                     allFilteredEvents.remove(currentEvent.getEventID());
-//                    filteredPersonEvents.get(currentEvent.getPersonID()).clear();
                 }
             }
         }
@@ -357,29 +303,22 @@ public class DataCache {
         for (Event event : resultArray) {
             if (!femaleEventsToggled) {
                 if (femaleEvents.contains(event)) {
-                    //if (resultArray.size() == 1) {
-                        //resultArray.remove(event);
-                    //} else {
-                        return new ArrayList<Event>();
-                    //}
+                    return new ArrayList<>();
                 }
             }
             if (!maleEventsToggled) {
                 if (maleEvents.contains(event)) {
-                    //resultArray.remove(event);
-                    return new ArrayList<Event>();
+                    return new ArrayList<>();
                 }
             }
             if (!motherSideToggled) {
                 if (motherSideEvents.contains(event)) {
-                    //resultArray.remove(event);
-                    return new ArrayList<Event>();
+                    return new ArrayList<>();
                 }
             }
             if (!fatherSideToggled) {
                 if (fatherSideEvents.contains(event)) {
-                    //resultArray.remove(event);
-                    return new ArrayList<Event>();
+                    return new ArrayList<>();
                 }
             }
         }
@@ -395,107 +334,4 @@ public class DataCache {
     }
 
     Event storedEventGlobal;
-
-/*
-    public ArrayList<Event> categorizeEvents(Map<String, ArrayList<Event>> personEvents) {
-
-        //Data Structures
-        ArrayList<Event> motherSideEvents;
-        ArrayList<Event> fatherSideEvents;
-        ArrayList<Event> personRootEvents;
-        ArrayList<Event> personRootSpouseEvents = new ArrayList<>();
-        ArrayList<Event> resultingEvents = new ArrayList<>();
-
-        /* GET FATHER AND MOTHER SIDES TO USE IN EVERY CASE
-        String mother = personMap.get(loggedInUser).getMotherID();
-        motherEvents.addAll(personEvents.get(mother));
-        filterParents(motherEvents, mother);
-        motherSideEvents = motherEvents;
-
-        String father = personMap.get(loggedInUser).getFatherID();
-        fatherEvents.addAll(personEvents.get(father));
-        filterParents(fatherEvents, father);
-        fatherSideEvents = fatherEvents;
-
-        Person rootPerson = personMap.get(loggedInUser);
-        personRootEvents = personEvents.get(rootPerson.getPersonID());
-
-        String rootSpouseID = personMap.get(loggedInUser).getSpouseID();
-        Person rootSpouse = personMap.get(rootSpouseID);
-
-        if (rootSpouse != null) {
-            personRootSpouseEvents = personEvents.get(rootSpouse.getPersonID());
-        }
-
-        resultingEvents.addAll(motherSideEvents);
-        resultingEvents.addAll(fatherSideEvents);
-        resultingEvents.addAll(personRootEvents);
-        resultingEvents.addAll(personRootSpouseEvents);
-
-        if (!fatherSideToggled) {
-            for (int i = 0; i < resultingEvents.size(); i++) {
-                Event event = resultingEvents.get(i);
-                if (fatherSideEvents.contains(event)) {
-                    resultingEvents.remove(i);
-                    i--;
-                }
-            }
-        }
-        if (!motherSideToggled) {
-            for (int i = 0; i < resultingEvents.size(); i++) {
-                Event event = resultingEvents.get(i);
-                if (motherSideEvents.contains(event)) {
-                    resultingEvents.remove(i);
-                    i--;
-                }
-            }
-        }
-        if (!maleEventsToggled) {
-            for (int i = 0; i < resultingEvents.size(); i++) {
-                Person currentPerson = personMap.get(resultingEvents.get(i).getPersonID());
-                if (currentPerson.getGender().equalsIgnoreCase("m")) {
-                    resultingEvents.remove(i);
-                    i--;
-                }
-            }
-        }
-        if (!femaleEventsToggled) {
-            for (int i = 0; i < resultingEvents.size(); i++) {
-                Person currentPerson = personMap.get(resultingEvents.get(i).getPersonID());
-                if (currentPerson.getGender().equalsIgnoreCase("f")) {
-                    resultingEvents.remove(i);
-                    i--;
-                }
-            }
-        }
-        return resultingEvents;
-    }*/
-
-/*
-    private void filterParents(ArrayList<Event> parentArray, String personID) {
-        Person tempPerson = personMap.get(personID); // Mother or Father of current user
-
-        parentArray.addAll(personEvents.get(tempPerson.getFatherID())); //Grandparents
-        parentArray.addAll(personEvents.get(tempPerson.getMotherID())); //Grandparents
-
-        String fatherID;
-        String motherID;
-
-        if (tempPerson.getFatherID() != null) {
-            tempPerson = personMap.get(tempPerson.getFatherID());
-            fatherID = tempPerson.getFatherID();
-
-            if (fatherID != null) {
-                filterParents(parentArray, fatherID);
-            }
-        }
-        if (tempPerson.getMotherID() != null) {
-            tempPerson = personMap.get(tempPerson.getMotherID());
-            motherID = tempPerson.getMotherID();
-
-            if (motherID != null) {
-                filterParents(parentArray, motherID);
-            }
-        }
-    }*/
 }
